@@ -1,0 +1,6 @@
+plt.figure(figsize=(10, 2))
+sns.heatmap(heatmap_data.to_frame().T, annot=True, fmt=".0f", cmap="YlGnBu", cbar_kws={'label': 'Donation Frequency'})
+plt.title('Donation Frequency by Day of the Week')
+plt.xlabel('Day of the Week')
+plt.ylabel('Frequency')
+plt.show()
