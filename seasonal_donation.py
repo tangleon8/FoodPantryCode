@@ -1,0 +1,7 @@
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='Season', y='Daily_Count', data=data.merge(daily_counts, on='Date'))
+plt.title('Box Plot of Daily Donation Counts by Season')
+plt.xlabel('Season')
+plt.ylabel('Daily Donation Counts')
+plt.xticks(ticks=[0, 1, 2, 3], labels=['Winter', 'Spring', 'Summer', 'Autumn'])
+plt.show()
