@@ -1,0 +1,20 @@
+plt.figure(figsize=(14, 7))
+
+plt.subplot(1, 2, 1)
+plt.hist(y_test_5, bins=30, alpha=0.5, label='Actual', color='blue')
+plt.hist(predictions_rf_5_simplified, bins=30, alpha=0.5, label='Predicted', color='red')
+plt.title('Histogram of Actual vs Predicted - 5-Day Count')
+plt.xlabel('Count')
+plt.ylabel('Frequency')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.hist(y_test_7, bins=30, alpha=0.5, label='Actual', color='blue')
+plt.hist(predictions_rf_7_simplified, bins=30, alpha=0.5, label='Predicted', color='red')
+plt.title('Histogram of Actual vs Predicted - 7-Day Count')
+plt.xlabel('Count')
+plt.ylabel('Frequency')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
