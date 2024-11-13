@@ -1,0 +1,71 @@
+import pandas as pd
+import folium
+from folium.plugins import TimestampedGeoJson
+
+# Load the data
+file_path = '/mnt/data/skunkworks_data_v6.csv'
+data_v6 = pd.read_csv(file_path)
+
+# Filter data for Wisconsin
+wisconsin_data = data_v6[(data_v6['Latitude'].between(42.5, 47)) & 
+                         (data_v6['Longitude'].between(-93, -86))]
+
+# Ensure 'Date' column is in datetime format or create a dummy if not present
+if 'Date' not in wisconsin_data.columns:
+    wisconsin_data['Date'] = pd.date_range(start='2023-01-01', periods=len(wisconsin_data), freq='D')
+else:
+    wisconsin_data['Date'] = pd.to_datetime(wisconsin_data['Date'], errors='coerce')
+
+# Create a folium map centered on Wisconsin
+detailed_time_lapse_map = folium.Map(location=[44.5, -89.5], zoom_start=7)
+
+# Prepare data for the time-lapse animation with city labels and detailed info
+geojson_features = []
+for _, row in wisconsin_data.iterrows():
+    if pd.notnull(row['Date']):  # Ensure valid date
+        feature = {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [row['Longitude'], row['Latitude']],
+            },
+            'properties': {
+                'time': row['Date'].strftime('%Y-%m-%d'),
+                'popup': (
+                    f"City: {row.get('City', 'N/A')}<br>"
+                    f"Zip: {row['Zip']}<br>"
+                    f"Donations: ${row['Amount']:,.2f}<br>"
+                    f"Date: {row['Date'].strftime('%Y-%m-%d')}"
+                ),
+                'icon': 'circle',
+                'iconstyle': {
+                    'fillColor': 'red',
+                    'fillOpacity': 0.6,
+                    'stroke': 'true',
+                    'radius': 8
+                }
+            }
+        }
+        geojson_features.append(feature)
+
+# Add TimestampedGeoJson with detailed information
+TimestampedGeoJson(
+    {
+        'type': 'FeatureCollection',
+        'features': geojson_features,
+    },
+    period='P1D',
+    add_last_point=True,
+    auto_play=False,
+    loop=True,
+    max_speed=10,  # Up to 10 fps
+    loop_button=True,
+    date_options='YYYY-MM-DD',
+    time_slider_drag_update=True
+).add_to(detailed_time_lapse_map)
+
+# Save the detailed map to an HTML file
+detailed_time_lapse_map_path = '/mnt/data/wisconsin_donations_detailed_time_lapse_map.html'
+detailed_time_lapse_map.save(detailed_time_lapse_map_path)
+
+print(f"Map saved as: {detailed_time_lapse_map_path}")
