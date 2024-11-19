@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Load the data
-data_path = '/Users/leontang/Downloads/skunkworks_data_v6.csv'  # Ensure this file path is correct and accessible
+data_path = '/Users/leontang/Downloads/skunkworks_data_v6.csv'  
 data = pd.read_csv(data_path)
 
 # Streamlit app layout
