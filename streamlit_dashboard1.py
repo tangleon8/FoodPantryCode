@@ -4,8 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import datetime
 
-# Load the data
-data_path = '/Users/leontang/Downloads/skunkworks_data_v6.csv'  # Ensure this file path is correct and accessible
+data_path = '/Users/leontang/Downloads/skunkworks_data_v6.csv'  
 data = pd.read_csv(data_path)
 
 # Convert the 'Date' column to datetime if not already
